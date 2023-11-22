@@ -111,8 +111,8 @@ if __name__ == "__main__":
     server.bind(('127.0.0.1', 8080))
     server.listen(5)
 
+    client, addr = server.accept()
     while True:
-        client, addr = server.accept()
         request = client.recv(1024).decode()
         print(request)
         i, j = request.split(",")
