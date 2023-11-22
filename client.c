@@ -8,9 +8,11 @@
 
 int main(void) {
 
-	struct sockaddr_in dest;
+	struct sockaddr_in dest1;
+  struct sockaddr_in dest2;
 
-	memset(&dest, 0, sizeof(dest));
+	memset(&dest1, 0, sizeof(dest1));
+  memset(&dest2, 0, sizeof(dest2));
 
 	char input_addr[20];
 	printf("input addres: \n");
@@ -23,39 +25,63 @@ int main(void) {
 	int port = atoi(input_port);
 	printf("your port is %d \n", port);
 
-	dest.sin_port = htons(port);
-	dest.sin_family = AF_INET;
-	dest.sin_addr.s_addr = inet_addr(input_addr);
+	dest1.sin_port = htons(port);
+	dest1.sin_family = AF_INET;
+	dest1.sin_addr.s_addr = inet_addr(input_addr);
+
+  dest2.sin_family = AF_INET;
+  dest2.sin_port = htons(8080);
+  dest2.sin_addr.s_addr = inet_addr("127.0.0.1");
 	WSADATA data;
 
 	WSAStartup(MAKEWORD(2, 0), &data);
 
-	SOCKET s = socket(AF_INET, SOCK_STREAM, 0);
 
-	if (connect(s, (struct sockaddr *) &dest, sizeof(dest))) {
-		printf("%s接続失敗\n", input_addr);
+	SOCKET s1 = socket(AF_INET, SOCK_STREAM, 0);
+	if (connect(s1, (struct sockaddr *) &dest1, sizeof(dest1))) {
+		printf("%s connection refused\n", input_addr);
 		return -1;
 	}
 
-	printf("%s名前\n", input_addr);
+  SOCKET s2 = socket(AF_INET, SOCK_STREAM, 0);
+  if (connect(s2, (struct sockaddr*)&dest2, sizeof(dest2)) != 0) {
+      printf("サーバー2への接続に失敗しました\n");
+      closesocket(s1);
+      WSACleanup();
+      return -1;
+  }
+
+	printf("%s connected! \n", input_addr);
 
 	char buffer[1024];
 	char name[20];
-	recv(s, buffer, 1024, 0);
+	recv(s1, buffer, 1024, 0);
 	printf("%s\n", buffer);
 	scanf("%s", name);
-	send(s, name, strlen(name), 0);
+	send(s1, name, strlen(name), 0);
 
 	while (1) {
 		memset(&buffer, 0, sizeof(buffer));
-		recv(s, buffer, 1024, 0);
+		recv(s1, buffer, 1024, 0);
 		printf("from server ---> %s\n", buffer);
 		char msg[20];
-		scanf("%s", msg);
-		send(s, msg, strlen(msg), 0);
+    if (strcmp(buffer, "start") == 0) {
+      // msgに"8,8"を入れる
+      sprintf(msg, "8,8");
+      send(s1, msg, strlen(msg), 0);
+    } else {
+      printf("buffer: %s\n", buffer);
+      send(s2, buffer, strlen(buffer), 0);
+      char response[1024];
+      int bytes_received = recv(s2, response, 1024, 0);
+      response[bytes_received] = '\0';
+      printf(response);
+      send(s1, response, strlen(response), 0);
+    }
 	}
 
-	closesocket(s);
+	closesocket(s1);
+	closesocket(s2);
 	WSACleanup();
 
 	return 0;
