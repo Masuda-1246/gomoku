@@ -6,15 +6,11 @@
 
 
 
-int main(void) {	
-
-	//�ڑ�����T�[�o�̏��̍\���̂�p��
+int main(void) {
 
 	struct sockaddr_in dest;
 
 	memset(&dest, 0, sizeof(dest));
-
-	//�T�[�o�̏������
 
 	char input_addr[20];
 	printf("input addres: \n");
@@ -27,32 +23,18 @@ int main(void) {
 	int port = atoi(input_port);
 	printf("your port is %d \n", port);
 
-	
-
-
 	dest.sin_port = htons(port);
-
 	dest.sin_family = AF_INET;
-
 	dest.sin_addr.s_addr = inet_addr(input_addr);
-
-
-
-
 	WSADATA data;
 
 	WSAStartup(MAKEWORD(2, 0), &data);
 
 	SOCKET s = socket(AF_INET, SOCK_STREAM, 0);
 
-
-
 	if (connect(s, (struct sockaddr *) &dest, sizeof(dest))) {
-
 		printf("%s接続失敗\n", input_addr);
-
 		return -1;
-
 	}
 
 	printf("%s名前\n", input_addr);
@@ -73,11 +55,8 @@ int main(void) {
 		send(s, msg, strlen(msg), 0);
 	}
 
-
 	closesocket(s);
-
 	WSACleanup();
 
-
-
 	return 0;
+}
