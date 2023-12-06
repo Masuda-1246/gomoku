@@ -206,9 +206,9 @@ int main()
       gameResult = playGomokuGame(s1, toMove);
       // 結果をユーザの伝える
       if (gameResult == BLACK_WIN)
-        printf("\nBlack player wins.\n\n");
+        printf("\nI'm Loser.\n\n");
       else if (gameResult == WHITE_WIN)
-        printf("\nWhite player wins.\n\n");
+        printf("\nI'm Winner.\n\n");
       else if (gameResult == DRAW)
         printf("\nThis game ended in a draw.\n\n");
       else
@@ -228,9 +228,9 @@ int main()
       gameResult = playGomokuGame(s1, toMove);
       // 結果をユーザの伝える
       if (gameResult == BLACK_WIN)
-        printf("\nBlack player wins.\n\n");
+        printf("\nI'm Winner.\n\n");
       else if (gameResult == WHITE_WIN)
-        printf("\nWhite player wins.\n\n");
+        printf("\nI'm Loser.\n\n");
       else if (gameResult == DRAW)
         printf("\nThis game ended in a draw.\n\n");
       else
