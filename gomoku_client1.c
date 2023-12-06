@@ -113,7 +113,8 @@ int whiteClosedTwo;		// 白い石を二つ並びの数、黒と同様
 
 // 関数のプロトタイプ
 void makeBoardEmpty();
-int playGomokuGame(SOCKET);
+void showBoard();
+int playGomokuGame(SOCKET, int);
 int fiveInRowCheck(int, int, int);
 void getNextHumanMove();
 int decideComputerMove(int);
@@ -174,12 +175,12 @@ int main()
   memset(&buffer, 0, sizeof(buffer));
   recv(s1, buffer, 1024, 0);
 
-  if (strcmp(buffer, "start") == 0) {
+  if (port == 12345) {
     isFirst = 1;
     gomokuBoard[8][8] = BLACK_STONE;
     sprintf(msg, "8,8");
     send(s1, msg, strlen(msg), 0);
-  } else  if (strcmp(buffer, "8,8") == 0){
+  } else if (port == 12346) {
     gomokuBoard[8][8] = BLACK_STONE;
     gomokuBoard[9][9] = WHITE_STONE;
     sprintf(msg, "9,9");
@@ -194,14 +195,15 @@ int main()
 
   switch (isFirst)
   {
-  case 1:
+  case 0:
     // COMは白の場合にプレイヤーを初期化
     whitePlayer = BEST_AI;
     // ゲームを最初から最後までやる
     if (whitePlayer)
     {
       blackPlayer = HUMAN;
-      gameResult = playGomokuGame(s1);
+			int toMove = BLACK;
+      gameResult = playGomokuGame(s1, toMove);
       // 結果をユーザの伝える
       if (gameResult == BLACK_WIN)
         printf("\nBlack player wins.\n\n");
@@ -215,14 +217,15 @@ int main()
     }
     break;
 
-  case 0:
+  case 1:
     // COMは黒の場合にプレイヤーを初期化
     blackPlayer = BEST_AI;
     if (blackPlayer)
     {
       whitePlayer = HUMAN;
       // ゲームを最初から最後までやる
-      gameResult = playGomokuGame(s1);
+      int toMove = WHITE;
+      gameResult = playGomokuGame(s1, toMove);
       // 結果をユーザの伝える
       if (gameResult == BLACK_WIN)
         printf("\nBlack player wins.\n\n");
@@ -242,6 +245,31 @@ int main()
 	return 0;
 }
 
+void showBoard()
+{
+	int x, y;
+
+	printf("  1 2 3 4 5 6 7 8 9 101112131415\n");
+	for (y = 1; y <= BOARDSIZE; y++)
+	{
+		if (y < 10)
+			printf(" %d", y);
+		else
+			printf("%d", y);
+		for (x = 1; x <= BOARDSIZE; x++)
+		{
+			if (gomokuBoard[x][y] == BLACK_STONE)
+				printf(" o");
+			else if (gomokuBoard[x][y] == WHITE_STONE)
+				printf(" x");
+			else
+				printf(" -");
+		}
+		printf("\n");
+	}
+}
+
+
 // 盤の初期化：すべてのマスを空きマスにする
 void makeBoardEmpty()
 {
@@ -255,12 +283,12 @@ void makeBoardEmpty()
 // 人間対COMの対局．ゲームが終わるまでに以下のことを繰り返す；
 // 1) COMの手番にCOMの手を決める
 // 2) 人間の手番の場合に人間の手を獲得
-int playGomokuGame(SOCKET s)
+int playGomokuGame(SOCKET s, int toMove)
 {
 	int gameResult = UNFINISHED;
-	int toMove = BLACK;
   char msg[20];
   char buffer[1024];
+	int isComTurn = 0;
 
 	moveCount = 1;
 
@@ -274,12 +302,10 @@ int playGomokuGame(SOCKET s)
 		{
 			// COMの手番
 			printf("Thinking about my move...\n");
+			isComTurn = 1;
 			if (decideComputerMove(toMove))
 			{
 				printf("Computer move: %d) (%d,%d)\n", moveCount, nextMoveX, nextMoveY);
-        memset(&msg, 0, sizeof(msg));
-        sprintf(msg, "%d,%d", nextMoveX, nextMoveY);
-        send(s, msg, strlen(msg), 0);
 			}
 			else //	COMの手は決められない
 			{
@@ -318,10 +344,14 @@ int playGomokuGame(SOCKET s)
 		// 手がさされたので手数を更新
 		moveCount++;
 
+		// 盤を表示
+		showBoard();
+
 		// 終了条件が満たしているかどうか
 		if (fiveInRowCheck(nextMoveX, nextMoveY, toMove))
 		{
-			// プレイヤーに手を戻すチャンスあげる（最後！）
+			sprintf(msg, "%d,%d,win", nextMoveX, nextMoveY);
+      send(s, msg, strlen(msg), 0);
       if (toMove == BLACK)
         gameResult = BLACK_WIN;
       else
@@ -331,8 +361,18 @@ int playGomokuGame(SOCKET s)
 		// 盤がいっぱいになったかどうかのチェック
 		else if (moveCount == (BOARDSIZE * BOARDSIZE))
 		{
+			sprintf(msg, "draw");
+      send(s, msg, strlen(msg), 0);
       gameResult = DRAW;
       break;
+		}
+		else {
+			if (isComTurn) {
+				memset(&msg, 0, sizeof(msg));
+        sprintf(msg, "%d,%d", nextMoveX, nextMoveY);
+        send(s, msg, strlen(msg), 0);
+				isComTurn = 0;
+			}
 		}
 
 		// 手番を更新
