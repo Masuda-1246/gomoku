@@ -137,9 +137,10 @@ int main()
   char input_port[20];
 
   memset(&dest1, 0, sizeof(dest1));
-  printf("input address: \n");
-  scanf("%s", input_addr);
-  printf("address: %s \n", input_addr);
+  // printf("input address: \n");
+  // scanf("%s", input_addr);
+  // printf("address: %s \n", input_addr);
+	sprintf(input_addr, "127.0.0.1")
 
   printf("input port: \n");
   scanf("%s", input_port);
@@ -169,7 +170,7 @@ int main()
   char msg[20];
   recv(s1, buffer, 1024, 0);
   printf("%s\n", buffer);
-  scanf("%s", name);
+	sprintf(name, "DENDEN");
   send(s1, name, strlen(name), 0);
 
   memset(&buffer, 0, sizeof(buffer));
