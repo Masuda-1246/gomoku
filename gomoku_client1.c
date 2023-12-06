@@ -140,7 +140,7 @@ int main()
   // printf("input address: \n");
   // scanf("%s", input_addr);
   // printf("address: %s \n", input_addr);
-	sprintf(input_addr, "127.0.0.1")
+	sprintf(input_addr, "127.0.0.1");
 
   printf("input port: \n");
   scanf("%s", input_port);
