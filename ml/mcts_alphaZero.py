@@ -114,6 +114,7 @@ class MCTS(object):
                 break
             # Greedily select next move.
             action, node = node.select(self._c_puct)
+            # print(f'action: {action}')
             state.do_move(action)
 
         # Evaluate the leaf using a network which outputs a list of
@@ -183,10 +184,84 @@ class MCTSPlayer(object):
         self.mcts.update_with_move(-1)
 
     def get_action(self, board, temp=1e-3, return_prob=0):
+      
         sensible_moves = board.availables
+
         # the pi vector returned by MCTS as in the alphaGo Zero paper
         move_probs = np.zeros(board.width*board.height)
-        if len(sensible_moves) > 0:
+      
+        # 最初の手なら中央を返す
+        if len(board.states) == 0:
+            acts, probs = self.mcts.get_move_probs(board, temp)
+            move_probs[list(acts)] = probs
+            move = board.width * board.height // 2
+            if self._is_selfplay:
+              self.mcts.update_with_move(move)
+            else:
+              self.mcts.update_with_move(-1)
+              
+            if return_prob:
+                return move, move_probs
+            else:
+                return move 
+        
+        # # 後攻1手目は中央に接する箇所に返す
+        # if len(board.states) == 1:
+        #     acts, probs = self.mcts.get_move_probs(board, temp)
+        #     move_probs[list(acts)] = probs
+        #     # if board.states[1] == board.width * board.height // 2:
+        #     move = board.width * board.height // 2 - (board.width + 1)
+        #     self.mcts.update_with_move(move)
+        #     if return_prob:
+        #         return move, move_probs
+        #     else:
+        #         return move 
+            # else:
+            #     move = board.width * board.height // 2
+            #     self.mcts.update_with_move(move)
+            #     if return_prob:
+            #         return move, move_probs
+            #     else:
+            #         return move 
+        # 後攻1手目は中央に接する箇所に返す
+        elif len(board.states) == 1:
+            acts, probs = self.mcts.get_move_probs(board, temp)
+            move_probs[list(acts)] = probs
+            # 中央に接する8か所をリストで指定
+            central_positions = [
+                board.width * board.height // 2 - (board.width + 1),
+                board.width * board.height // 2 - (board.width - 1),
+                board.width * board.height // 2 + (board.width + 1),
+                board.width * board.height // 2 + (board.width - 1),
+                board.width * board.height // 2 - 1,
+                board.width * board.height // 2 + 1,
+                board.width * board.height // 2 - board.width,
+                board.width * board.height // 2 + board.width
+            ]
+            
+            if self._is_selfplay:
+              
+              # 正規化された確率を計算
+              normalized_probs = (0.75 * probs[central_positions] +
+                                  0.25 * np.random.dirichlet(0.3 * np.ones(len(central_positions))))
+              normalized_probs /= np.sum(normalized_probs)
+              # それぞれの位置に確率を振り、その確率に基づいて選択
+              move = np.random.choice(
+                  central_positions,
+                  p=normalized_probs
+              )
+              self.mcts.update_with_move(move)
+            else:
+              normalized_probs = (probs[central_positions]+1e-3)/np.sum(probs[central_positions]+1e-3)
+              move = np.random.choice(central_positions, p=normalized_probs)
+              self.mcts.update_with_move(-1)
+              
+            if return_prob:
+                return move, move_probs
+            else:
+                return move
+      
+        elif len(sensible_moves) > 0:
             acts, probs = self.mcts.get_move_probs(board, temp)
             move_probs[list(acts)] = probs
             if self._is_selfplay:

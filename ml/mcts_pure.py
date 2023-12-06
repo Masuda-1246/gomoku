@@ -194,8 +194,37 @@ class MCTSPlayer(object):
         self.mcts.update_with_move(-1)
 
     def get_action(self, board):
+      
         sensible_moves = board.availables
-        if len(sensible_moves) > 0:
+        # 最初の手なら中央を返す
+        if len(board.states) == 0:
+            move = board.width * board.height // 2
+            self.mcts.update_with_move(-1)
+            return move
+            
+        
+        elif len(board.states) == 1:
+            
+            # 中央に接する8か所をリストで指定
+            central_positions = [
+                board.width * board.height // 2 - (board.width + 1),
+                board.width * board.height // 2 - (board.width - 1),
+                board.width * board.height // 2 + (board.width + 1),
+                board.width * board.height // 2 + (board.width - 1),
+                board.width * board.height // 2 - 1,
+                board.width * board.height // 2 + 1,
+                board.width * board.height // 2 - board.width,
+                board.width * board.height // 2 + board.width
+            ]
+            # それぞれの位置に確率を振り、その確率に基づいて選択
+            move = np.random.choice(
+                central_positions,
+            )
+            self.mcts.update_with_move(-1)
+            return move
+              
+        
+        elif len(sensible_moves) > 0:
             move = self.mcts.get_move(board)
             self.mcts.update_with_move(-1)
             return move

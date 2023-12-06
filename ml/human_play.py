@@ -49,7 +49,7 @@ class Human(object):
 def run():
     n = 5
     width, height = 15, 15
-    model_file = 'best_policy_15_15_5.model'
+    model_file = 'current_policy_15_15_5_gen2.model'
     try:
         board = Board(width=width, height=height, n_in_row=n)
         game = Game(board)
@@ -80,7 +80,7 @@ def run():
         human = Human()
 
         # set start_player=0 for human first
-        game.start_play(human, mcts_player, start_player=1, is_shown=1)
+        game.start_play(human, mcts_player, start_player=0, is_shown=1)
     except KeyboardInterrupt:
         print('\n\rquit')
 
