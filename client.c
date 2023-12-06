@@ -48,8 +48,8 @@ int main(void) {
 
     char buffer[1024];
     char name[20];
-		char response[1024];
-		int bytes_received = 0;
+    char response[1024];
+    int bytes_received = 0;
     recv(s1, buffer, 1024, 0);
     printf("%s\n", buffer);
     scanf("%s", name);
@@ -57,7 +57,7 @@ int main(void) {
 
     while (1) {
         memset(&buffer, 0, sizeof(buffer));
-				memset(&response, 0, sizeof(response));
+		memset(&response, 0, sizeof(response));
         recv(s1, buffer, 1024, 0);
         printf("from server ---> %s\n", buffer);
         char msg[20];
