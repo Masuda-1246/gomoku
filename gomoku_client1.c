@@ -743,19 +743,13 @@ int evaluate(int side, int nextToMove, int depth)
 
 				// 石の連結を数える
 				countY = y;
-				for (countX = x + 1; countX <= BOARDSIZE; countX++)
-				{
-					if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+				for (countX = x + 1; countX <= BOARDSIZE; countX++) {
+					if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
@@ -780,19 +774,13 @@ int evaluate(int side, int nextToMove, int depth)
 				}
 
 				// 石の連結を数える
-				for (countX = x + 1, countY = y + 1; countX <= BOARDSIZE && countY <= BOARDSIZE; countX++, countY++)
-				{
-					if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+				for (countX = x + 1, countY = y + 1; countX <= BOARDSIZE && countY <= BOARDSIZE; countX++, countY++) {
+					if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
@@ -818,19 +806,13 @@ int evaluate(int side, int nextToMove, int depth)
 
 				// 石の連結を数える
 				countX = x;
-				for (countY = y + 1; countY <= BOARDSIZE; countY++)
-				{
-					if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+				for (countY = y + 1; countY <= BOARDSIZE; countY++) {
+					if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
@@ -842,11 +824,8 @@ int evaluate(int side, int nextToMove, int depth)
 				// 石の連結の種類の数を更新
 				blackConnectionAdmin(connectNo, blocked, emptySqCon);
 
-			}
-			else if (gomokuBoard[x][y] == WHITE_STONE)
-			{
+			} else if (gomokuBoard[x][y] == WHITE_STONE) {
 				// このマスから黒い石を数える
-
 				// 北東方向
 				connectNo = 1;
 				emptySqCon = 0;
@@ -860,19 +839,13 @@ int evaluate(int side, int nextToMove, int depth)
 				}
 
 				// 石の連結を数える
-				for (countX = x + 1, countY = y - 1; countX <= BOARDSIZE && countY >= 1; countX++, countY--)
-				{
-					if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+				for (countX = x + 1, countY = y - 1; countX <= BOARDSIZE && countY >= 1; countX++, countY--) {
+					if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
@@ -898,19 +871,13 @@ int evaluate(int side, int nextToMove, int depth)
 
 				// 石の連結を数える
 				countY = y;
-				for (countX = x + 1; countX <= BOARDSIZE; countX++)
-				{
-					if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+				for (countX = x + 1; countX <= BOARDSIZE; countX++) {
+					if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
@@ -935,19 +902,13 @@ int evaluate(int side, int nextToMove, int depth)
 				}
 
 				// 石の連結を数える
-				for (countX = x + 1, countY = y + 1; countX <= BOARDSIZE && countY <= BOARDSIZE; countX++, countY++)
-				{
-					if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+				for (countX = x + 1, countY = y + 1; countX <= BOARDSIZE && countY <= BOARDSIZE; countX++, countY++) {
+					if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
@@ -973,19 +934,13 @@ int evaluate(int side, int nextToMove, int depth)
 
 				// 石の連結を数える
 				countX = x;
-				for (countY = y + 1; countY <= BOARDSIZE; countY++)
-				{
-					if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+				for (countY = y + 1; countY <= BOARDSIZE; countY++) {
+					if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
@@ -1039,17 +994,13 @@ int evaluate(int side, int nextToMove, int depth)
 			eval -= whiteClosedTwo * bestEvalValues[CLOSED_TWO_VALUE];
 
 			// 手番にボーナス
-			if (nextToMove == BLACK)
-			{
+			if (nextToMove == BLACK) {
 				eval += bestEvalValues[INITIATIVE];
-			}
-			else
-			{
+			} else {
 				eval -= bestEvalValues[INITIATIVE];
 			}
 
-		}
-		else {
+		} else {
 			// 勝ち以外の連結の評価（黒）
 			eval += blackClosedFour * testValues[CLOSED_FOUR_VALUE];
 			eval += blackOpenThree * testValues[OPEN_THREE_VALUE];
@@ -1065,12 +1016,9 @@ int evaluate(int side, int nextToMove, int depth)
 			eval -= whiteClosedTwo * testValues[CLOSED_TWO_VALUE];
 
 			// 手番にボーナス
-			if (nextToMove == BLACK)
-			{
+			if (nextToMove == BLACK) {
 				eval += testValues[INITIATIVE];
-			}
-			else
-			{
+			} else {
 				eval -= testValues[INITIATIVE];
 			}
 		}
@@ -1088,33 +1036,26 @@ int evaluate(int side, int nextToMove, int depth)
 }
 
 // 石の連結の種類の数を更新（黒の場合）
-void blackConnectionAdmin( int connectNo, int blocked, int openSquare )
-{
+void blackConnectionAdmin( int connectNo, int blocked, int openSquare ) {
 	if ( blocked >= 2 ) {
 		// 連結は完全にブラックされている
-	}
-	else if ( connectNo + openSquare < 5 )
-	{
+	} else if ( connectNo + openSquare < 5 ) {
 		// 連結は５まで伸ばせない
-	}
-	else if ( connectNo == 4 )
-	{
+	} else if ( connectNo == 4 ) {
 		// 長さ４の連結を発見した
 		if ( blocked == 0 )
 			blackOpenFour++;
 		else if ( blocked == 1 )
 			blackClosedFour++;
 	}
-	else if ( connectNo == 3 )
-	{
+	else if ( connectNo == 3 ) {
 		// 長さ３の連結を発見した
 		if ( blocked == 0 )
 			blackOpenThree++;
 		else if ( blocked == 1 )
 			blackClosedThree++;
 	}
-	else if ( connectNo == 2 )
-	{
+	else if ( connectNo == 2 ) {
 		// 長さ２の連結を発見した
 		if ( blocked == 0 )
 			blackOpenTwo++;
@@ -1124,33 +1065,26 @@ void blackConnectionAdmin( int connectNo, int blocked, int openSquare )
 }
 
 // 石の連結の種類の数を更新（白の場合）
-void whiteConnectionAdmin( int connectNo, int blocked, int openSquare )
-{
+void whiteConnectionAdmin( int connectNo, int blocked, int openSquare ) {
 	if ( blocked >= 2 ) {
 		// 連結は完全にブラックされている
 	}
-	else if ( connectNo + openSquare < 4 )
-	{
+	else if ( connectNo + openSquare < 4 ) {
 		// 連結は５まで伸ばせない
-	}
-	else if ( connectNo == 4 )
-	{
+	} else if ( connectNo == 4 ) {
 		// 長さ４の連結を発見した
 		if ( blocked == 0 )
 			whiteOpenFour++;
 		else if ( blocked == 1 )
 			whiteClosedFour++;
-	}
-	else if ( connectNo == 3 )
-	{
+	} else if ( connectNo == 3 ) {
 		// 長さ３の連結を発見した
 		if ( blocked == 0 )
 			whiteOpenThree++;
 		else if ( blocked == 1 )
 			whiteClosedThree++;
 	}
-	else if ( connectNo == 2 )
-	{
+	else if ( connectNo == 2 ) {
 		// 長さ２の連結を発見した
 		if ( blocked == 0 )
 			whiteOpenTwo++;
