@@ -45,6 +45,31 @@ class Human(object):
     def __str__(self):
         return "Human {}".format(self.player)
 
+class Opponent(object):
+    """
+    human player
+    """
+
+    def __init__(self):
+        self.player = None
+
+    def set_player_ind(self, p):
+        self.player = p
+
+    def get_action(self, board, i, j):
+        try:
+            location = f"{i+1},{j+1}"
+            move = board.location_to_move(location)
+        except Exception as e:
+            move = -1
+        if move == -1 or move not in board.availables:
+            print("invalid move")
+            move = self.get_action(board)
+        return move
+
+    def __str__(self):
+        return "Opponent {}".format(self.player)
+
 
 def run():
     n = 5
@@ -80,7 +105,7 @@ def run():
         human = Human()
 
         # set start_player=0 for human first
-        game.start_play(human, mcts_player, start_player=0, is_shown=1)
+        game.start_play(human, mcts_player, start_player=1, is_shown=1)
     except KeyboardInterrupt:
         print('\n\rquit')
 

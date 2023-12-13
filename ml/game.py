@@ -221,3 +221,32 @@ class Game(object):
                     else:
                         print("Game end. Tie")
                 return winner, zip(states, mcts_probs, winners_z)
+              
+              
+    def start_server_play(self, player1, player2, start_player=0, is_shown=1):
+        """start a game between two players"""
+        if start_player not in (0, 1):
+            raise Exception('start_player should be either 0 (player1 first) '
+                            'or 1 (player2 first)')
+        self.board.init_board(start_player)
+        p1, p2 = self.board.players
+        player1.set_player_ind(p1)
+        player2.set_player_ind(p2)
+        players = {p1: player1, p2: player2}
+        if is_shown:
+            self.graphic(self.board, player1.player, player2.player)
+        while True:
+            current_player = self.board.get_current_player()
+            player_in_turn = players[current_player]
+            move = player_in_turn.get_action(self.board)
+            self.board.do_move(move)
+            if is_shown:
+                self.graphic(self.board, player1.player, player2.player)
+            end, winner = self.board.game_end()
+            if end:
+                if is_shown:
+                    if winner != -1:
+                        print("Game end. Winner is", players[winner])
+                    else:
+                        print("Game end. Tie")
+                return winner
