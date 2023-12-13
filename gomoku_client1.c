@@ -589,54 +589,42 @@ int alphaBetaSearch(int depth, int toMove, int alpha, int beta)
 
 	// Generate all the moves by putting stones of the right color on the empty squares
 	// 空いているマスに正しい色の石を置いて、すべての手を作成
-	for (x = 1; x <= BOARDSIZE; x++)
-	{
-		for (y = 1; y <= BOARDSIZE; y++)
-		{
-			if (gomokuBoard[x][y] == EMPTY_SQUARE)
-			{
+	for (x = 1; x <= BOARDSIZE; x++) {
+		for (y = 1; y <= BOARDSIZE; y++) {
+			if (gomokuBoard[x][y] == EMPTY_SQUARE) {
 				gomokuBoard[x][y] = toMove;
 				// この手で五目並べになったかどうかをチェック
-				if (fiveInRowCheck(x, y, toMove))
-				{
-					if (rootToMove == toMove)
-					{
+				if (fiveInRowCheck(x, y, toMove)){
+					if (rootToMove == toMove) {
 						// Maxプレイヤーの五目並べ
 						// 手を戻す
 						gomokuBoard[x][y] = EMPTY_SQUARE;
 						// 勝ちになった手は探索の初期局面にあったので手を保存する
-						if (depth == 0)
-						{
+						if (depth == 0){
 							nextMoveX = x;
 							nextMoveY = y;
 						}
 						return WINNING - depth;			// 浅い探索の勝ちは深い探索の勝ちより良い
 					}
-					else
-					{
+					else {
 						// Minプレイヤーの五目並べ
 						// 手を戻す
 						gomokuBoard[x][y] = EMPTY_SQUARE;
 						return -(WINNING - depth);	// 浅い探索の勝ちは深い探索の勝ちより良い
 					}
-				}
-				else
-				{
+				} else {
 					// alpha-beta探索を再帰的に呼ぶ
 					eval = alphaBetaSearch(depth + 1, flip(toMove), alpha, beta);
 
 					// 手を戻す
 					gomokuBoard[x][y] = EMPTY_SQUARE;
 
-					if (rootToMove == toMove)
-					{
+					if (rootToMove == toMove) {
 						// この局面はMaxプレイヤーの手番．探索の結果は現在の最大評価より高いならば最大評価を更新
-						if (eval > score)
-						{
+						if (eval > score) {
 							score = eval;
 							// 最善手は探索の初期局面にあったので手を保存する
-							if (depth == 0)
-							{
+							if (depth == 0) {
 								nextMoveX = x;
 								nextMoveY = y;
 							}
@@ -648,9 +636,7 @@ int alphaBetaSearch(int depth, int toMove, int alpha, int beta)
 						// alphaを更新
 						if (score > alpha)
 							alpha = score;
-					}
-					else
-					{
+					} else {
 						// この局面はMinプレイヤーの手番．探索の結果は現在の最低評価より低いならば最低評価を更新
 						if (eval < score)
 							score = eval;
@@ -706,13 +692,10 @@ int evaluate(int side, int nextToMove, int depth)
 	whiteOpenTwo = 0;
 	whiteClosedTwo = 0;
 
-	for (x = 1; x <= BOARDSIZE; x++)
-	{
-		for (y = 1; y <= BOARDSIZE; y++)
-		{
+	for (x = 1; x <= BOARDSIZE; x++) {
+		for (y = 1; y <= BOARDSIZE; y++) {
 
-			if (gomokuBoard[x][y] == BLACK_STONE)
-			{
+			if (gomokuBoard[x][y] == BLACK_STONE) {
 				// このマスから黒い石を数える
 
 				// 北東方向
@@ -728,19 +711,13 @@ int evaluate(int side, int nextToMove, int depth)
 				}
 
 				// 石の連結を数える
-				for (countX = x + 1, countY = y - 1; countX <= BOARDSIZE && countY >= 1; countX++, countY--)
-				{
-					if (gomokuBoard[countX][countY] == BLACK_STONE)
-					{
+				for (countX = x + 1, countY = y - 1; countX <= BOARDSIZE && countY >= 1; countX++, countY--) {
+					if (gomokuBoard[countX][countY] == BLACK_STONE) {
 						connectNo++;
-					}
-					else if (gomokuBoard[countX][countY] == WHITE_STONE)
-					{
+					} else if (gomokuBoard[countX][countY] == WHITE_STONE) {
 						blocked++;
 						break;
-					}
-					else
-					{
+					} else {
 						break;
 					}
 				}
