@@ -182,10 +182,21 @@ int main()
     sprintf(msg, "8,8");
     send(s1, msg, strlen(msg), 0);
   } else if (port == 12346) {
-    gomokuBoard[8][8] = BLACK_STONE;
-    gomokuBoard[9][9] = WHITE_STONE;
-    sprintf(msg, "9,9");
-    send(s1, msg, strlen(msg), 0);
+		// bufferをint x, yに分割
+		char *token = strtok(buffer, ",");
+		int x = atoi(token);
+		token = strtok(NULL, ",");
+		int y = atoi(token);
+		gomokuBoard[x][y] = BLACK_STONE;
+		x %= BOARDSIZE;
+		x++;
+		y %= BOARDSIZE;
+		y++;
+		sprintf(msg, "%d,%d", x, y);
+		send(s1, msg, strlen(msg), 0);
+		gomokuBoard[x][y] = WHITE_STONE;
+	} else {
+		printf("Illegal input: Please select one of the menu options.\n");
   } else {
     printf("Illegal input: Please select one of the menu options.\n");
   }
