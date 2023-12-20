@@ -7,7 +7,7 @@
 #include <winsock2.h>
 
 // 現在の最強の評価値
-const int bestEvalValues[] = {10, 15, 8, 12, 5, 10};
+const int bestEvalValues[] = {10, 10, 10, 10, 10, 10};
 
 // 評価値配列の中、評価特徴の場所
 #define CLOSED_FOUR_VALUE 0  // 1番目の値
